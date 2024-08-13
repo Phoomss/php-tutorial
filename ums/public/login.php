@@ -17,7 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($loggedInUser) {
         session_start();
         $_SESSION['user'] = $loggedInUser;
-        header("Location: ../index.php");
+
+        // ตรวจสอบบทบาทผู้ใช้
+        if ($loggedInUser['role'] == 'admin') {
+            header("Location: ../admin.php");  // ไปยังหน้า Admin
+        } else {
+            header("Location: ../user.php");   // ไปยังหน้า User
+        }
         exit();
     } else {
         echo "<p class='alert alert-danger'>Login failed. Invalid email or password.</p>";
