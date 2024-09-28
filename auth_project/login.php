@@ -22,7 +22,23 @@
                 type: 'POST',
                 data: $(this).serialize(),
                 success: function(response) {
-                    alert(response);
+                    const res = JSON.parse(response);
+                    if (res.status === "success") {
+                        if (res.role === "admin") {
+                            window.location.href = "./frontend/admin/admin_dashboard.php";
+                        } else if (res.role === "user") {
+                            window.location.href = "./frontend/user/user_dashboard.php";
+                        } else if (res.role === "manager") {
+                            window.location.href = "manager_dashboard.php";
+                        } else {
+                            window.location.href = "index.php";
+                        }
+                    } else {
+                        alert(res.message);
+                    }
+                },
+                error: function() {
+                    alert("An error occurred while processing your request.");
                 }
             });
         });

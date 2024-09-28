@@ -1,5 +1,8 @@
 <?php
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 class User
 {
     private $conn;
@@ -8,6 +11,7 @@ class User
     public $username;
     public $email;
     public $password;
+    public $role;
 
     public function __construct($db)
     {
@@ -16,16 +20,22 @@ class User
 
     public function register()
     {
-        $query = "INSERT INTO " . $this->table_name . " (username, email, password) VALUES (:username, :email, :password)";
+        // ตรวจสอบว่า role ถูกกำหนดแล้วหรือไม่
+        if (empty($this->role)) {
+            $this->role = 'user'; // กำหนดค่าเริ่มต้นให้เป็น 'user' หากไม่ได้รับจาก input
+        }
+
+        $query = "INSERT INTO " . $this->table_name . " (username, email, password, role) VALUES (:username, :email, :password, :role)";
         $stmt = $this->conn->prepare($query);
 
-        // ทำการเข้ารหัสรหัสผ่าน
+        // เข้ารหัสรหัสผ่าน
         $this->password = password_hash($this->password, PASSWORD_BCRYPT);
 
         // ผูกค่าตัวแปร
         $stmt->bindParam(":username", $this->username);
         $stmt->bindParam(":email", $this->email);
         $stmt->bindParam(":password", $this->password);
+        $stmt->bindParam(":role", $this->role);
 
         if ($stmt->execute()) {
             return true;
@@ -34,26 +44,21 @@ class User
         return false;
     }
 
+
     public function login()
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE email = :email";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":email", $this->email);
         $stmt->execute();
-    
+
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
         if ($user && password_verify($this->password, $user['password'])) {
-            // เก็บค่าใน session
-            $_SESSION['userInfo'] = [
-                'id' => $user['id'],
-                'username' => $user['username'],
-                'email' => $user['email']
-            ];
-            return $user;
+            $_SESSION['userInfo'] = $user;
+            return true;
         }
-    
+
         return false;
     }
-    
 }

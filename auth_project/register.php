@@ -8,10 +8,14 @@
 </head>
 
 <body>
-    <form id="registerForm">
+    <form id="registerForm" method="POST" action="register_action.php">
         <input type="text" name="username" placeholder="Username" required>
         <input type="email" name="email" placeholder="Email" required>
         <input type="password" name="password" placeholder="Password" required>
+        <select name="role" required>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+        </select>
         <button type="submit">Register</button>
     </form>
 

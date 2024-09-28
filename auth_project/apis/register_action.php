@@ -10,6 +10,7 @@ $user = new User($db);
 $user->username = $_POST['username'];
 $user->email = $_POST['email'];
 $user->password = $_POST['password'];
+$user->role = $_POST['role']; 
 
 if($user->register()) {
     echo "Registration successful!";
