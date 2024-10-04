@@ -73,7 +73,7 @@ $(document).ready(function() {
         let formData = new FormData(this);
 
         $.ajax({
-            url: 'upload.php',
+            url: '../api/upload.php',
             type: 'POST',
             data: formData,
             contentType: false,
@@ -91,7 +91,7 @@ $(document).ready(function() {
     // Load products function
     function loadProducts() {
         $.ajax({
-            url: 'get_all_products.php',
+            url: '../api/get_all_products.php',
             type: 'GET',
             success: function(data) {
                 $("#productsContainer").html(data);

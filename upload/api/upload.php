@@ -1,5 +1,5 @@
 <?php
-require_once 'Product.php';
+require_once '../Product.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $product = new Product();
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_FILES['images']['name'][0])) {
         foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
             $image_name = $_FILES['images']['name'][$key];
-            $target_dir = "uploads/"; // Ensure this directory exists and is writable
+            $target_dir = "../uploads/product"; // Ensure this directory exists and is writable
             $target_file = $target_dir . basename($image_name);
             
             // Check if the file was uploaded without errors

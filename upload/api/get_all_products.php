@@ -1,5 +1,5 @@
 <?php
-require_once 'Product.php';
+require_once '../Product.php';
 
 $product = new Product();
 $products = $product->getAll();
